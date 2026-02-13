@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+dist
+# .env* # Removed by Orchids to allow .env files
+-e 
+# Environment files
+# *.env # Removed by Orchids to allow .env files
+# *.env.* # Removed by Orchids to allow .env files

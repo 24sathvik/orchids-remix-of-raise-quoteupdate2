@@ -1,0 +1,24 @@
+2026-02-03T10:19:17.880Z [console][log] [Fast Refresh] rebuilding
+2026-02-03T10:19:19.026Z [console][log] [Fast Refresh] done in 1147ms
+2026-02-03T10:19:29.128Z [console][log] [Fast Refresh] rebuilding
+2026-02-03T10:19:30.084Z [console][log] [Fast Refresh] done in 956ms
+2026-02-03T10:19:52.897Z [console][log] [Fast Refresh] rebuilding
+2026-02-03T10:19:53.674Z [console][log] [Fast Refresh] done in 777ms
+2026-02-03T10:20:08.335Z [console][log] [Fast Refresh] rebuilding
+2026-02-03T10:20:08.961Z [console][log] [Fast Refresh] done in 626ms
+2026-02-03T10:19:12.328Z [network][GET 200] 
+  response: 2:I["(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/segment-explorer-node.js",["app-pages-internals","static/chunks/app-pages-internals.js"],"SegmentViewNode"]
+4:"$Sreact.fragment"
+13:I["(app-pages-browser)/./src/lib/hooks/use-auth.tsx",["app/layout","static/chunks/app/layout.js"],"AuthProvider"]
+15:I["(app-pages-browser)/./node_modules/next/dist/client/script.js",["app/layout","static/chunks/app/layout.js"],""]
+17:I["(app-pages-browser)/./src/components/ErrorReporter.tsx",["app/layout","static/chunks/app/layout.js"],"default"]
+1a:I["(app-pages-browser)/./node_modules/sonner/dist/index.mjs",["app/layout","static/chunks/app/layout.js"],"Toaster"]
+1c:I["(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js",["app-pages-internals","static/chunks/app-pages-internals.js"],""]
+1e:I["(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js",["app-pages-internals","static/chunks/app-pages-internals.js"],""]
+2d:I["(app-pages-browser)/./node_modules/orchids-visual-edits/dist/index.js",["app/layout","static/chunks/app/layout.js"],"VisualEditsMessenger"]
+3e:I["(app-pages-browser)/./node_modules/next/dist/client/components/client-page.js",["app-pages-internals","static/chunks/app-pages-internals.js"],"ClientPageRoot"]
+3f:I["(app-pages-browser)/./src/app/admin/quotations/page.tsx",["app/admin/quotations/page","static/chunks/app/admin/quotations/page.js"],"default"]
+41:I["(app-pages-browser)/./node_modules/next/dist/lib/framework/boundary-components.js",["app-pages-internals","static/chunks/app-pages-internals.js"],"OutletBoundary"]
+48:I["(app-pages-browser)/./node_modules/next/dist/client/components/metadata/async-metadata.js",["app-pages-internals","static/chunks/app-pages-internals.js"],"AsyncMetadataOutlet"]
+50:I["(app-pages-browser)/./node_modules/next/dist/lib/framework/boundary-components.js",["app-pages-internals","static/chunks/app-pages-internals.js"],"ViewportBoundary"]
+56:I["(app-... [truncated]

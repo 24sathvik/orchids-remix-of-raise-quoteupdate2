@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raise Lab Equipment - Quotation Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+</head>
+<body>
+    <!-- Login View -->
+    <div id="login-view" class="view active">
+        <div class="login-container">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="Raise Lab Equipment Logo" class="logo">
+                <h1>Raise Lab Equipment</h1>
+                <p>Quotation Generator</p>
+            </div>
+            <form id="login-form" novalidate>
+                <div class="input-group">
+                    <label for="userid">User ID</label>
+                    <input type="text" id="userid" name="userid" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+                <div id="login-error" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App View -->
+    <div id="app-view" class="view">
+        <header>
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="images/logo.png" alt="Raise Lab Equipment Logo" class="header-logo">
+                    <h1>Raise Lab Equipment</h1>
+                </div>
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="app-container">
+                <!-- Left Column: Product Selector -->
+                <div class="left-column">
+                    <div class="search-container">
+                        <input type="text" id="product-search" placeholder="Search products by name or ID...">
+                    </div>
+                    
+                    <div class="product-list-container">
+                        <h2>Products</h2>
+                        <div id="product-list" class="product-list"></div>
+                    </div>
+                    
+                    <div id="product-detail" class="product-detail hidden">
+                        <div class="detail-header">
+                            <img id="detail-photo" src="" alt="" class="detail-photo">
+                            <div class="detail-info">
+                                <h3 id="detail-name"></h3>
+                                <p id="detail-id"></p>
+                                <p id="detail-price"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-description">
+                            <h4>Description</h4>
+                            <p id="detail-desc"></p>
+                        </div>
+                        
+                        <div class="detail-features">
+                            <h4>Features</h4>
+                            <ul id="detail-features"></ul>
+                        </div>
+                        
+                        <div class="detail-specs">
+                            <h4>Specifications</h4>
+                            <ul id="detail-specs"></ul>
+                        </div>
+                        
+                        <div class="product-controls">
+                            <div class="control-group">
+                                <label for="unit-price">Unit Price (₹)</label>
+                                <input type="number" id="unit-price" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" id="quantity" min="1" value="1">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="warranty">Warranty (months)</label>
+                                <input type="number" id="warranty" min="0">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label>Add-ons</label>
+                                <div id="addons-container"></div>
+                            </div>
+                            
+                            <button id="add-to-bill" class="primary-btn">Add to Bill</button>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-charges">
+                        <h3>Custom Charges</h3>
+                        <div id="custom-charges-list"></div>
+                        <div class="add-custom-charge">
+                            <input type="text" id="custom-name" placeholder="Charge name">
+                            <input type="number" id="custom-price" placeholder="Price" min="0" step="0.01">
+                            <button id="add-custom-charge">Add</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Live Bill Preview -->
+                <div class="right-column">
+                    <div class="bill-header">
+                        <h2>Quotation Preview</h2>
+                        <div class="currency-toggle">
+                            <label>Display Currency:</label>
+                            <select id="currency-selector">
+                                <option value="INR">₹ (INR)</option>
+                                <option value="USD">$ (USD)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="bill-preview">
+                        <table id="bill-table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Product Name</th>
+                                    <th>Product ID</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bill-items"></tbody>
+                        </table>
+                        
+                        <div class="bill-summary">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Custom Charges:</span>
+                                <span id="custom-charges-total">₹0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>GST (18%):</span>
+                                <span id="gst">₹0.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="total">₹0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bill-actions">
+                            <button id="generate-bill" class="primary-btn">Generate Final Bill</button>
+                            <button id="save-draft">Save Draft</button>
+                            <button id="past-bills">Past Bills</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Final Bill View -->
+    <div id="final-bill-view" class="view">
+        <div class="final-bill-container">
+            <div class="final-bill-header">
+                <button id="back-to-app" class="back-btn">← Back to App</button>
+                <button id="download-pdf" class="primary-btn">Save as PDF</button>
+            </div>
+            <div id="final-bill-content" class="final-bill-content"></div>
+        </div>
+    </div>
+
+    <!-- Past Bills View -->
+    <div id="past-bills-view" class="view">
+        <div class="past-bills-container">
+            <div class="past-bills-header">
+                <button id="back-to-app-past" class="back-btn">← Back to App</button>
+                <h2>Past Bills</h2>
+            </div>
+            <div id="past-bills-list" class="past-bills-list"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="images_base64.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
