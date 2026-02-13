@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
@@ -20,43 +21,37 @@ function getAdminClient() {
 
 async function getAuthenticatedAdmin() {
   const cookieStore = await cookies()
-  const allCookies = cookieStore.getAll()
-  
-  // Find the Supabase access token from cookies
-  const accessTokenCookie = allCookies.find(c => c.name.endsWith('-auth-token'))
-    || allCookies.find(c => c.name.includes('auth-token'))
-  
-  // Try to parse the token - Supabase stores it as a JSON array in chunked cookies
-  let accessToken: string | null = null
-  
-  // Check for chunked cookies (sb-<ref>-auth-token.0, sb-<ref>-auth-token.1, etc.)
-  const authTokenChunks = allCookies
-    .filter(c => c.name.includes('-auth-token'))
-    .sort((a, b) => a.name.localeCompare(b.name))
-  
-  if (authTokenChunks.length > 0) {
-    const combined = authTokenChunks.map(c => c.value).join('')
-    try {
-      const parsed = JSON.parse(combined)
-      accessToken = parsed?.access_token || parsed?.[0]?.access_token || (typeof parsed === 'string' ? parsed : null)
-    } catch {
-      // Not JSON, might be a raw token
-      accessToken = combined
-    }
-  }
-  
-  if (!accessToken) {
-    return null
-  }
 
-  const supabaseAdmin = getAdminClient()
-  const { data: { user }, error } = await supabaseAdmin.auth.getUser(accessToken)
-  
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // Called from a Server Component / Route Handler after headers sent
+          }
+        },
+      },
+    }
+  )
+
+  const { data: { user }, error } = await supabase.auth.getUser()
+
   if (error || !user) {
     return null
   }
 
-  // Check admin role
+  const supabaseAdmin = getAdminClient()
+
+  // Check admin role using admin client (bypasses RLS)
   const { data: profile } = await supabaseAdmin
     .from('profiles')
     .select('role')
